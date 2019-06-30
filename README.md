@@ -1,4 +1,4 @@
-# intugine
+# Intugine Technologies
 
 ## Project setup
 ```
