@@ -26,6 +26,10 @@ const getEntireDeviceLoc = async (value, page) => {
 }  
 
 
+import sortArray from '@/utils/sort'
+
+Vue.use(Vuex)
+
 export default new Vuex.Store({
   state: {
   	token: null,
@@ -48,14 +52,14 @@ export default new Vuex.Store({
       state.devices = [...deviceData]
     },
     setDeviceLocation(state, locData) {
-      let deviceID = locData.deviceId
+      let deviceID = locData.deviceID
+      state.checked = locData.checked
       state.resultByDevice = { [deviceID]: locData.result.map((item) => {
         if (item.gps === undefined) {
           return { position: {} }
         } 
         return { position: { lat: item.gps[0], lng: item.gps[1] }, createdAt: item.createdAt }
       })}
-      state.checked = locData.checked
     },
     removeLocation(state, values) {
       let { [values.value]: data, ...res } = state.resultByDevice;
@@ -147,5 +151,5 @@ export default new Vuex.Store({
     getDevices(state) {
       return state.devices
     }
-  }
+  }  
 })

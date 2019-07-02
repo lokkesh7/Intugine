@@ -5,7 +5,6 @@ import WelcomePage from './components/welcome.vue'
 import SigninPage from './components/signin.vue'
 import Dashboard from '@/components/dashboard.vue'
 import store from '@/store/store'
-import customAxios from '@/utils/axios-auth'
 //using the vue router in vue application
 Vue.use(VueRouter)
 

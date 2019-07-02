@@ -4,9 +4,6 @@ import axios from 'axios'
 const instance = axios.create({
   baseURL: 'https://dl5opah3vc.execute-api.ap-south-1.amazonaws.com'
 })
-//let token = localStorage.getItem('token')
-//instance.defaults.headers.get['Authorization'] = `Bearer ${token}`
-
 instance.interceptors.request.use(
   (config) => {
     let token = localStorage.getItem('token');

@@ -20,7 +20,6 @@
     flex-direction: column;
     justify-content: center;
   }
-
   p {
     text-align: center;
   }

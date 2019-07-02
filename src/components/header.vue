@@ -27,7 +27,7 @@
     },
     methods: {
       onLogout() {
-        // Dispatching action to logout from actions in store.js if checkbox is checked
+        // Dispatching action to logout from actions in store.js
         this.$store.dispatch('logout')
       }
     }
