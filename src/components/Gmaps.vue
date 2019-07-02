@@ -4,7 +4,8 @@
 </template>
 
 <script>
-/* eslint-disable */
+import customSort from '@/utils/sort'
+
 export default {
   name: "GoogleMap",
   data() {
@@ -12,7 +13,9 @@ export default {
       values: [],
       map: null,
       allMarker: [],
-      icon: null
+      icon: null,
+      polyline: null,
+      polyLineCoord: []
     };
   },
 
@@ -21,7 +24,8 @@ export default {
     this.map = new window.google.maps.Map(document.getElementById('map'), {
             center: { lat: 28.645, lng: 77.217 },
             scrollwheel: false,
-            zoom: 5
+            zoom: 5,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
             })
     this.icon = 'https://assetsstatic.s3.ap-south-1.amazonaws.com/navigation.svg'
   },
@@ -40,67 +44,29 @@ export default {
     getLocation(newValue, oldValue) {
       let newResult = Object.values(newValue)
       this.values = this.values.concat(...newResult)
-      console.log(this.values)
       this.addMarker()
     },
     getChecked(newValue, oldValue) {
-      console.log(newValue)
-      console.log(oldValue)
-      console.log(this.allMarker)
       if(newValue === false) {
         for (var i = 0; i < this.allMarker.length; i++) {
-          this.allMarker[i].setMap(null);
+          this.allMarker[i].setMap(null)
         }
+        this.allMarker = []
         this.values = []
+        this.polyline.setMap(null)
+        this.polyLineCoord = []
       }
     }
   },
-  // methods: {
-  //   //Method to add markers in the google map for given position
-  //   addMarker() {
-  //          let prevLoc = {}
-  //          const markers = this.values.map(x => {
-  //           if (!Object.keys(x.position).length) {
-  //            let marker = new window.google.maps.Marker({
-  //               position: {
-  //               lat : prevLoc.position.lat,
-  //               lng : prevLoc.position.lng
-  //               },
-  //               icon: this.icon,
-  //               map: this.map
-  //             })
-  //             return prevLoc = prevLoc
-  //           } else {
-  //             let marker = new window.google.maps.Marker({
-  //               position: {
-  //               lat : x.position.lat,
-  //               lng : x.position.lng
-  //               },
-  //               icon: this.icon,
-  //               map: this.map
-  //             })
-  //             return prevLoc = x
-  //           }
-            
-  //   //Aligning marker position based on the direction of travel
-  //           console.log(prevLoc)
-  //           this.allMarker.push(marker)
-  //           marker.setPosition(new window.google.maps.LatLng(
-  //               x.position.lat,
-  //               x.position.lng
-  //             ))
-  //         });
-  //   }
-  // }
-
   methods: {
     //Method to add markers in the google map for given position
     addMarker() {
           let prevLoc = {}
-          let marker = null
+          let marker = {}
+          this.value 
           const markers = this.values.map(x => {
             if (!Object.keys(x.position).length) {
-              marker = new google.maps.Marker({
+              marker = new window.google.maps.Marker({
                 position: {
                 lat : prevLoc.position.lat,
                 lng : prevLoc.position.lng
@@ -108,9 +74,9 @@ export default {
                 icon: this.icon,
                 map: this.map
               })
-              return prevLoc = prevLov
+              prevLoc = prevLoc
             } else {
-              marker = new google.maps.Marker({
+              marker = new window.google.maps.Marker({
                 position: {
                 lat : x.position.lat,
                 lng : x.position.lng
@@ -118,17 +84,32 @@ export default {
                 icon: this.icon,
                 map: this.map
               })
-              return prevLoc = x
+              prevLoc = x
             }
-            
     //Aligning marker position based on the direction of travel        
             this.allMarker.push(marker)
-            marker.setPosition(new google.maps.LatLng(
+            let markers = marker.getPosition()
+            marker.setPosition(new window.google.maps.LatLng(
                 x.position.lat,
                 x.position.lng
               ))
           });
-    }
+
+          this.values.forEach((elem) => {
+            let LatLng = new window.google.maps.LatLng(elem.position.lat, elem.position.lng)
+            this.polyLineCoord.push(LatLng)
+          })
+          this.polyline = new window.google.maps.Polyline({
+            path: this.polyLineCoord,
+            geodesic: true,
+            strokeOpacity: 1.0,
+            strokeColor: '#FF0000',
+            strokeWeight: 2,
+            map: this.map
+          })
+          
+
+    },
   }
 };
 </script>
